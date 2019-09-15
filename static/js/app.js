@@ -1,20 +1,9 @@
-var directory = '../../sample.json'
-d3.json(directory).then((entry) => {
-    var sorted = entry.sort((a, b) => b.sample_values - a.sample_values);
-    var sliced = sorted.slice(0, 10);
-    var reversed = sliced.reverse();
+var directory = 'static/data/samples.json';
+d3.json(directory).then((entries) => {
+    console.log(entries);
+    console.log(entries.samples);
+    
+    var dropdown = [];
+    entries.samples.forEach(([key, value]) => console.log(entries.samples.id));
 
-    var trace1 = {
-        x: reversed.map((object) => object.otu_ids),
-        y: reversed.map((object) => object.sample_values),
-        // name: ,
-        type: 'bar',
-        orientation: 'h'
-    };
-
-    var data = [trace1];
-
-
-
-    Plotly.newPlot('bar', data);
 });
