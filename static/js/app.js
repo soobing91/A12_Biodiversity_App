@@ -20,7 +20,7 @@ function init() {
         });
 
         generate_metadata(ids[0]);
-        plot(ids[0]);
+        bubble_plot(ids[0]);
     });
 };
 
@@ -37,14 +37,19 @@ function generate_metadata(subject) {
         var demo_info = d3.select('#sample-metadata');
         demo_info.html('');
         Object.entries(filtered_metadata[0]).forEach(([key, value]) => {
-            var info_p = demo_info.append('li');
+            var info_p = demo_info.append('p');
             info_p.text(`${key}: ${value}`);
         });
     });
 };
 
+// Create a bar graph.
+function bar_graph(subject) {
+    console.log(subject);
+};
+
 // Create a bubble chart.
-function plot(subject) {
+function bubble_plot(subject) {
     d3.json(directory).then((entry) => {
 
         // Filter the data with the selected ID number.
@@ -82,7 +87,7 @@ function plot(subject) {
 
 function optionChanged(option) {
     generate_metadata(option);
-    plot(option);
+    bubble_plot(option);
 };
 
 init();
