@@ -1,4 +1,4 @@
-# Assignment 15 - SooBin
+# Assignment 15: Belly Button Biodiversity - Soo Bin
 For this exercise, a web dashboard with various charts depicting microbial species called operational taxonomic units, OTUs, is created. For codes, please refer to the following documents:
 * `static/js/app.js`
 * `index.html`
