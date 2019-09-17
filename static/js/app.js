@@ -4,6 +4,7 @@ var directory = 'static/data/samples.json';
 // Select the dropdown menu.
 var dropdown = d3.select('#selDataset');
 
+// Create an initial structure.
 function init() {
     d3.json(directory).then((entry) => {
         // Check the structure of this object.
@@ -122,7 +123,13 @@ function bar_graph(subject) {
 
         var data = [trace1];
 
-        Plotly.newPlot('bar', data);
+        var layout = {
+            title: `Top 10 OTU Population of Subject ${subject}`,
+            xaxis: {title: 'Number of Samples'},
+            yaxis: {title: 'OTU ID'}
+        };
+
+        Plotly.newPlot('bar', data, layout);
     }); 
 };
 
