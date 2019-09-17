@@ -20,6 +20,8 @@ function init() {
         });
 
         generate_metadata(ids[0]);
+        gauge_chart(ids[0]);
+        bar_graph(ids[0]);
         bubble_plot(ids[0]);
     });
 };
@@ -43,10 +45,87 @@ function generate_metadata(subject) {
     });
 };
 
+// Create a gauge chart.
+function gauge_chart(subject) {
+    d3.json(directory).then((entry) => {
+
+        // Filter the data with the selected ID number.
+        var idInput = dropdown.property('value');
+        var filtered_metadata = entry.metadata.filter((row) => row.id === parseInt(idInput));
+        console.log(filtered_metadata);
+
+        // Set up variables.
+        var trace1 = {
+            domain: {
+                x: [0, 1],
+                y: [0, 1]
+            },
+            value: filtered_metadata[0].wfreq,
+            title: 'Wash Frequency',
+            type: 'indicator',
+            mode: 'gauge+number',
+            gauge: {
+                axis: {range: [null, 9]},
+                steps: [
+                    {range: [0, 1], color: 'lightyellow'},
+                    {range: [1, 2], color: 'lemonchiffon'},
+                    {range: [2, 3], color: 'palegoldenrod'},
+                    {range: [3, 4], color: 'khaki'},
+                    {range: [4, 5], color: 'yellowgreen'},
+                    {range: [5, 6], color: 'darkseagreen'},
+                    {range: [6, 7], color: 'mediumseagreen'},
+                    {range: [7, 8], color: 'forestgreen'},
+                    {range: [8, 9], color: 'darkgreen'},
+                ]
+            }
+        };
+    
+        var data = [trace1];
+
+        var layout = {width: 500, height: 500, margin: {t: 0, b: 0}};
+
+        Plotly.newPlot('gauge', data, layout);
+    });  
+};
+
 // Create a bar graph.
 function bar_graph(subject) {
-    console.log(subject);
+    d3.json(directory).then((entry) => {
+
+        // Filter the data with the selected ID number.
+        var idInput = dropdown.property('value');
+        var filtered_sample = entry.samples.filter((row) => row.id === idInput);
+        console.log(filtered_sample[0]);
+
+        // Slice the data.
+        var sliced_values = filtered_sample[0].sample_values.slice(0, 10).reverse();
+        var sliced_labels = filtered_sample[0].otu_labels.slice(0, 10).reverse();
+        var sliced_ids = filtered_sample[0].otu_ids.slice(0, 10).reverse();
+        console.log(sliced_ids);
+
+        // Convert OTU IDs into string.
+        var ids_toString = [];
+
+        for (var i = 0; i < sliced_ids.length; i ++) {
+            ids_toString.push(`OTU ${sliced_ids[i].toString()}`);
+        };
+        console.log(ids_toString);
+
+        // Set up variables.
+        var trace1 = {
+            x: sliced_values,
+            y: ids_toString,
+            text: sliced_labels,
+            type: 'bar',
+            orientation: 'h'
+        };
+
+        var data = [trace1];
+
+        Plotly.newPlot('bar', data);
+    }); 
 };
+
 
 // Create a bubble chart.
 function bubble_plot(subject) {
@@ -81,13 +160,15 @@ function bubble_plot(subject) {
             }
         };
 
-        Plotly.newPlot(bubble, data, layout);
+        Plotly.newPlot('bubble', data, layout);
     });
 };
 
 function optionChanged(option) {
     generate_metadata(option);
+    bar_graph(option);
     bubble_plot(option);
+    gauge_chart(option)
 };
 
 init();
